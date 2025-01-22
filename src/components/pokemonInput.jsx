@@ -60,6 +60,45 @@ export default function PokemonInput() {
     fetchData(newSearchTerm);
   };
 
+  let contentRendering;
+  //Inicial render - only themes
+  if (!searchTerm) {
+    contentRendering = (
+      <div className="themes">
+        <p>Themes</p>
+        <ul style={{ listStyleType: "none", padding: 0 }}>
+          {themes.map(([theme, url]) => (
+            <li key={theme}>
+              <span onClick={() => handleThemeClick(theme)}>{theme}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+    //Search term to url and present results - if next and previous available on results, add navigation arrows
+  } else if (searchTerm && results.length > 0) {
+    contentRendering = (
+      <div className="results">
+        <p>Results: {results.length}</p>
+        <ul style={{ listStyleType: "none", padding: 0 }}>
+          {results.map((result) => (
+            <li key={result.name}>
+              <span
+                onClick={() => handleResultClick(result.name)}
+                style={{ cursor: "pointer" }}
+              >
+                {result.name}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+    //Search term to url and endpoint - present card
+  } else if (searchTerm && results.length === 0) {
+    contentRendering = <div>No results found</div>;
+  }
+
   return (
     <div>
       <input
@@ -69,34 +108,7 @@ export default function PokemonInput() {
         onKeyDown={handleKeyPress}
         value={searchTerm}
       />
-      {!searchTerm ? (
-        <div className="themes">
-          <p>Themes</p>
-          <ul style={{ listStyleType: "none", padding: 0 }}>
-            {themes.map(([theme, url]) => (
-              <li key={theme}>
-                <span onClick={() => handleThemeClick(theme)}>{theme}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        <div className="results">
-          <p>Results: {themes.length}</p>
-          <ul style={{ listStyleType: "none", padding: 0 }}>
-            {results.map((result) => (
-              <li key={result.name}>
-                <span
-                  onClick={() => handleResultClick(result.name)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {result.name}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {contentRendering}
     </div>
   );
 }

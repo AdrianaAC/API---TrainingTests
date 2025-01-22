@@ -1,5 +1,5 @@
 export default async function getPokemonData(searchTerm) {
-  const apiURL = `https://pokeapi.co/api/v2/${searchTerm}?limit=60`;
+  const apiURL = `https://pokeapi.co/api/v2/pokemon/${searchTerm}?limit=60`;
 
   try {
     const response = await fetch(apiURL);
